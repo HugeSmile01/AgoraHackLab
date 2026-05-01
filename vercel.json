@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    },
+    {
+      "source": "/(css|js)/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/pages/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/disclaimer", "destination": "/pages/disclaimer.html" },
+    { "source": "/privacy", "destination": "/pages/privacy.html" },
+    { "source": "/terms", "destination": "/pages/terms.html" },
+    { "source": "/languages", "destination": "/pages/programming-languages.html" }
+  ]
+}

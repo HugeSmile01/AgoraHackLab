@@ -10,6 +10,28 @@ The application files now live at the repository root:
 - `css/`
 - `js/`
 - `pages/`
+- `vercel.json`
+
+## Vercel Deployment (Production Ready)
+
+This repo is configured for zero-build static deployment on Vercel.
+
+### Included routing
+
+- `/` → `index.html`
+- `/disclaimer` → `pages/disclaimer.html`
+- `/privacy` → `pages/privacy.html`
+- `/terms` → `pages/terms.html`
+- `/languages` → `pages/programming-languages.html`
+
+### Deploy steps
+
+1. Import this repository into Vercel.
+2. Framework preset: **Other** (no build command needed).
+3. Output directory: leave empty (root static deployment).
+4. Deploy.
+
+The `vercel.json` also includes baseline security headers and static asset cache policy.
 
 ## Responsible Use Notice
 
