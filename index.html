@@ -65,8 +65,7 @@
     <section id="workspace" class="workspace">
       <!-- URL toolbar -->
       <div class="toolbar" role="search" aria-label="Target URL">
-        <label for="urlInput" class="sr-only">Target URL</label>
-        <input id="urlInput" type="url" placeholder="https://example.test/page?id=1" autocomplete="off" />
+        <input id="urlInput" type="url" placeholder="https://example.test/page?id=1" autocomplete="off" aria-label="Target URL" />
         <div class="toolbar-actions">
           <button id="loadBtn" class="btn-primary" title="Load the URL in the browser frame">Load</button>
           <button id="scanBtn" title="Automatically scan the loaded page">Auto Scan</button>
@@ -185,8 +184,10 @@
       <!-- Scanner panel -->
       <section id="scanner" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-scanner">
         <h2>Scanner</h2>
-        <label for="scanProgress" class="muted" style="font-size:0.75rem">Scan progress</label>
-        <progress id="scanProgress" value="0" max="100" aria-label="Scan progress"></progress>
+        <div class="form-field">
+          <label for="scanProgress">Scan progress</label>
+          <progress id="scanProgress" value="0" max="100" aria-label="Scan progress"></progress>
+        </div>
         <button id="fuzzBtn" class="btn-primary" title="Fuzz the selected parameter with safe test markers">Fuzz selected param with safe markers</button>
         <ul id="findingsList" aria-label="Scan findings" aria-live="polite"></ul>
       </section>

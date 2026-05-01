@@ -521,6 +521,13 @@ progress::-moz-progress-bar      { background: var(--accent); border-radius: var
 /* ---------- Utility ---------- */
 .muted { color: var(--muted); }
 
+/* Stand-alone page content wrapper (disclaimer, privacy, terms) */
+.page-content {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 var(--space-md);
+}
+
 /* Visually hidden but accessible to screen readers */
 .sr-only {
   position: absolute;
