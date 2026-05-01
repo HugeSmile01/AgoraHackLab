@@ -22,6 +22,11 @@
   <section class="consent-bar">
     <label><input id="authorizedToggle" type="checkbox" /> I confirm I am testing only systems I own or am authorized to assess.</label>
     <span id="consentState" class="tag warn">Actions locked</span>
+    <label><input id="strictModeToggle" type="checkbox" checked /> Strict scope mode</label>
+    <input id="allowedHostsInput" placeholder="Allowed hosts (comma-separated): example.test, staging.example.test" />
+    <input id="rpmLimitInput" type="number" min="5" max="600" value="30" placeholder="Req/min" />
+    <button id="saveEnvBtn">Save Env Policy</button>
+    <span id="envState" class="tag info">Strict scope ON</span>
   </section>
 
   <main class="layout">
