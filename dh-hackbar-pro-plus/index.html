@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DH HackBar Pro+ — Authorized Testing Console</title>
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>DH HackBar Pro+</h1>
+      <p>Authorized web testing console. Local-first, browser-only.</p>
+    </div>
+    <nav>
+      <a href="pages/disclaimer.html" target="_blank">Disclaimer</a>
+      <a href="pages/privacy.html" target="_blank">Privacy</a>
+      <a href="pages/terms.html" target="_blank">Terms</a>
+    </nav>
+  </header>
+
+  <section class="consent-bar">
+    <label><input id="authorizedToggle" type="checkbox" /> I confirm I am testing only systems I own or am authorized to assess.</label>
+    <span id="consentState" class="tag warn">Actions locked</span>
+  </section>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <h2>Payloads</h2>
+      <div id="payloadCategories"></div>
+    </aside>
+
+    <section class="workspace">
+      <div class="toolbar">
+        <input id="urlInput" type="url" placeholder="https://example.test/page?id=1" />
+        <button id="loadBtn">Load</button>
+        <button id="scanBtn">Auto Scan</button>
+        <button id="backBtn">Back</button>
+        <button id="fwdBtn">Fwd</button>
+        <button id="reloadBtn">Reload</button>
+      </div>
+
+      <div class="status-grid">
+        <span>Forms <b id="countForms">0</b></span>
+        <span>Inputs <b id="countInputs">0</b></span>
+        <span>Params <b id="countParams">0</b></span>
+        <span>Links <b id="countLinks">0</b></span>
+        <span>Tech <b id="countTech">0</b></span>
+      </div>
+
+      <div id="detectedBar" class="detected-bar"></div>
+
+      <section class="browser-wrap">
+        <iframe id="browserFrame" sandbox="allow-forms allow-scripts allow-same-origin" title="Browser frame"></iframe>
+        <div id="scanOverlay" class="overlay hidden">Scanning…</div>
+      </section>
+
+      <section class="tabs">
+        <button data-tab="payloadBuilder" class="active">Payload Builder</button>
+        <button data-tab="autoFill">Auto-Fill</button>
+        <button data-tab="encoder">Encoder</button>
+        <button data-tab="tamper">Tamper</button>
+        <button data-tab="scanner">Scanner</button>
+        <button data-tab="adminFinder">Admin Finder</button>
+        <button data-tab="dios">DIOS</button>
+        <button data-tab="notes">Notes</button>
+        <button data-tab="logPanel">Log</button>
+      </section>
+
+      <section id="payloadBuilder" class="panel active">
+        <h2>Payload Builder</h2>
+        <input id="builderUrl" placeholder="Target URL" />
+        <select id="paramSelect"></select>
+        <textarea id="payloadInput" placeholder="Use a selected safe test marker or enter your authorized test string"></textarea>
+        <select id="methodSelect"><option>GET</option><option>POST</option></select>
+        <button id="executePayloadBtn">Execute</button>
+        <pre id="builderOutput"></pre>
+      </section>
+
+      <section id="autoFill" class="panel">
+        <h2>Auto-Fill Targets</h2>
+        <div id="formsList"></div>
+        <div id="paramsList"></div>
+      </section>
+
+      <section id="encoder" class="panel">
+        <h2>Encoder / Decoder</h2>
+        <textarea id="encoderInput" placeholder="Input"></textarea>
+        <div class="button-row" id="encoderButtons"></div>
+        <textarea id="encoderOutput" placeholder="Output" readonly></textarea>
+      </section>
+
+      <section id="tamper" class="panel">
+        <h2>Tamper Headers</h2>
+        <select id="uaSelect"><option value="">Default browser UA</option><option>Mozilla/5.0 AuthorizedTester</option><option>DH-HackBar-Pro-Plus/1.0</option></select>
+        <input id="refererInput" placeholder="Referer" />
+        <input id="cookieInput" placeholder="Cookie" />
+        <input id="xffInput" placeholder="X-Forwarded-For" />
+        <div id="customHeaders"></div>
+        <button id="addHeaderBtn">Add custom header</button>
+        <button id="saveTamperBtn">Save tamper state</button>
+      </section>
+
+      <section id="scanner" class="panel">
+        <h2>Scanner</h2>
+        <progress id="scanProgress" value="0" max="100"></progress>
+        <button id="fuzzBtn">Fuzz selected param with safe markers</button>
+        <ul id="findingsList"></ul>
+      </section>
+
+      <section id="adminFinder" class="panel">
+        <h2>Admin Finder</h2>
+        <input id="adminBaseUrl" placeholder="https://example.test" />
+        <button id="adminStartBtn">Start authorized path check</button>
+        <ul id="adminResults"></ul>
+      </section>
+
+      <section id="dios" class="panel">
+        <h2>DIOS Library</h2>
+        <p class="muted">This build includes non-executing educational labels rather than live dump queries.</p>
+        <div id="diosList"></div>
+      </section>
+
+      <section id="notes" class="panel">
+        <h2>Notes</h2>
+        <input id="noteTitle" placeholder="Title" />
+        <textarea id="noteContent" placeholder="Observation notes"></textarea>
+        <button id="saveNoteBtn">Save Note</button>
+        <button id="exportNotesBtn">Export Notes</button>
+        <div id="notesList"></div>
+      </section>
+
+      <section id="logPanel" class="panel">
+        <h2>Activity Log</h2>
+        <button id="clearLogBtn">Clear</button>
+        <button id="exportLogBtn">Export</button>
+        <pre id="log"></pre>
+      </section>
+    </section>
+  </main>
+
+  <script src="js/logger.js"></script>
+  <script src="js/payloads.js"></script>
+  <script src="js/encoder.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/tamper.js"></script>
+  <script src="js/scanner.js"></script>
+  <script src="js/admin-finder.js"></script>
+  <script src="js/notes.js"></script>
+</body>
+</html>
