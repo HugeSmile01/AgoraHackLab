@@ -7,140 +7,235 @@
   <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
+  <a class="skip-link" href="#workspace">Skip to main content</a>
+
   <header class="app-header">
     <div>
       <h1>AgoraHackLab</h1>
       <p>Authorized web testing console. Local-first, browser-only.</p>
     </div>
-    <nav>
-      <a href="pages/disclaimer.html" target="_blank">Disclaimer</a>
-      <a href="pages/privacy.html" target="_blank">Privacy</a>
-      <a href="pages/terms.html" target="_blank">Terms</a>
-      <a href="/languages" target="_blank">Top Languages</a>
+    <nav aria-label="Site pages">
+      <a href="pages/disclaimer.html" target="_blank" rel="noopener">Disclaimer</a>
+      <a href="pages/privacy.html" target="_blank" rel="noopener">Privacy</a>
+      <a href="pages/terms.html" target="_blank" rel="noopener">Terms</a>
+      <a href="/languages" target="_blank" rel="noopener">Top Languages</a>
     </nav>
   </header>
 
-  <section class="consent-bar">
-    <label><input id="authorizedToggle" type="checkbox" /> I confirm I am testing only systems I own or am authorized to assess.</label>
-    <span id="consentState" class="tag warn">Actions locked</span>
-    <label><input id="strictModeToggle" type="checkbox" checked /> Strict scope mode</label>
-    <input id="allowedHostsInput" placeholder="Allowed hosts (comma-separated): example.test, staging.example.test" />
-    <input id="rpmLimitInput" type="number" min="5" max="600" value="30" placeholder="Req/min" />
-    <button id="saveEnvBtn">Save Env Policy</button>
-    <span id="envState" class="tag info">Strict scope ON</span>
+  <section class="consent-bar" aria-label="Authorization and scope settings">
+    <!-- Authorization toggle -->
+    <div class="consent-group">
+      <label>
+        <input id="authorizedToggle" type="checkbox" />
+        I confirm I am testing only systems I own or am authorized to assess.
+      </label>
+      <span id="consentState" class="tag warn" aria-live="polite">Actions locked</span>
+    </div>
+
+    <div class="consent-divider" role="separator" aria-hidden="true"></div>
+
+    <!-- Environment policy controls -->
+    <div class="consent-group">
+      <label>
+        <input id="strictModeToggle" type="checkbox" checked />
+        Strict scope mode
+      </label>
+
+      <div class="form-field">
+        <label for="allowedHostsInput">Allowed hosts</label>
+        <input id="allowedHostsInput" type="text" placeholder="example.test, staging.example.test" autocomplete="off" />
+      </div>
+
+      <div class="form-field">
+        <label for="rpmLimitInput">Req / min</label>
+        <input id="rpmLimitInput" type="number" min="5" max="600" value="30" />
+      </div>
+
+      <button id="saveEnvBtn" class="btn-primary" title="Save environment policy settings">Save Env Policy</button>
+      <span id="envState" class="tag info" aria-live="polite">Strict scope ON</span>
+    </div>
   </section>
 
   <main class="layout">
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Payload library">
       <h2>Payloads</h2>
-      <div id="payloadCategories"></div>
+      <div id="payloadCategories" role="list" aria-label="Payload categories"></div>
     </aside>
 
-    <section class="workspace">
-      <div class="toolbar">
-        <input id="urlInput" type="url" placeholder="https://example.test/page?id=1" />
-        <button id="loadBtn">Load</button>
-        <button id="scanBtn">Auto Scan</button>
-        <button id="backBtn">Back</button>
-        <button id="fwdBtn">Fwd</button>
-        <button id="reloadBtn">Reload</button>
+    <section id="workspace" class="workspace">
+      <!-- URL toolbar -->
+      <div class="toolbar" role="search" aria-label="Target URL">
+        <input id="urlInput" type="url" placeholder="https://example.test/page?id=1" autocomplete="off" aria-label="Target URL" />
+        <div class="toolbar-actions">
+          <button id="loadBtn" class="btn-primary" title="Load the URL in the browser frame">Load</button>
+          <button id="scanBtn" title="Automatically scan the loaded page">Auto Scan</button>
+        </div>
+        <div class="toolbar-nav" role="group" aria-label="Frame navigation">
+          <button id="backBtn" title="Go back in history">&#8592; Back</button>
+          <button id="fwdBtn" title="Go forward in history">Fwd &#8594;</button>
+          <button id="reloadBtn" title="Reload the current frame">&#8635; Reload</button>
+        </div>
       </div>
 
-      <div class="status-grid">
-        <span>Forms <b id="countForms">0</b></span>
-        <span>Inputs <b id="countInputs">0</b></span>
-        <span>Params <b id="countParams">0</b></span>
-        <span>Links <b id="countLinks">0</b></span>
-        <span>Tech <b id="countTech">0</b></span>
+      <!-- Page statistics -->
+      <div class="status-grid" aria-label="Page analysis summary" aria-live="polite">
+        <span><span class="stat-label">Forms</span><b id="countForms">0</b></span>
+        <span><span class="stat-label">Inputs</span><b id="countInputs">0</b></span>
+        <span><span class="stat-label">Params</span><b id="countParams">0</b></span>
+        <span><span class="stat-label">Links</span><b id="countLinks">0</b></span>
+        <span><span class="stat-label">Tech</span><b id="countTech">0</b></span>
       </div>
 
-      <div id="detectedBar" class="detected-bar"></div>
+      <div id="detectedBar" class="detected-bar" aria-label="Detected technologies" aria-live="polite"></div>
 
-      <section class="browser-wrap">
-        <iframe id="browserFrame" sandbox="allow-forms allow-scripts allow-same-origin" title="Browser frame"></iframe>
-        <div id="scanOverlay" class="overlay hidden">Scanning…</div>
+      <!-- Embedded browser -->
+      <section class="browser-wrap" aria-label="Target page preview">
+        <iframe id="browserFrame" sandbox="allow-forms allow-scripts allow-same-origin" title="Target site preview frame"></iframe>
+        <div id="scanOverlay" class="overlay hidden" role="status" aria-live="polite">Scanning…</div>
       </section>
 
-      <section class="tabs">
-        <button data-tab="payloadBuilder" class="active">Payload Builder</button>
-        <button data-tab="autoFill">Auto-Fill</button>
-        <button data-tab="encoder">Encoder</button>
-        <button data-tab="tamper">Tamper</button>
-        <button data-tab="scanner">Scanner</button>
-        <button data-tab="adminFinder">Admin Finder</button>
-        <button data-tab="dios">DIOS</button>
-        <button data-tab="notes">Notes</button>
-        <button data-tab="logPanel">Log</button>
-      </section>
+      <!-- Tool tabs -->
+      <div class="tabs" role="tablist" aria-label="Testing tools">
+        <button id="tab-payloadBuilder" role="tab" aria-selected="true"  aria-controls="payloadBuilder" data-tab="payloadBuilder" class="active">Payload Builder</button>
+        <button id="tab-autoFill"       role="tab" aria-selected="false" aria-controls="autoFill"       data-tab="autoFill">Auto-Fill</button>
+        <button id="tab-encoder"        role="tab" aria-selected="false" aria-controls="encoder"        data-tab="encoder">Encoder</button>
+        <button id="tab-tamper"         role="tab" aria-selected="false" aria-controls="tamper"         data-tab="tamper">Tamper</button>
+        <button id="tab-scanner"        role="tab" aria-selected="false" aria-controls="scanner"        data-tab="scanner">Scanner</button>
+        <button id="tab-adminFinder"    role="tab" aria-selected="false" aria-controls="adminFinder"    data-tab="adminFinder">Admin Finder</button>
+        <button id="tab-dios"           role="tab" aria-selected="false" aria-controls="dios"           data-tab="dios">DIOS</button>
+        <button id="tab-notes"          role="tab" aria-selected="false" aria-controls="notes"          data-tab="notes">Notes</button>
+        <button id="tab-logPanel"       role="tab" aria-selected="false" aria-controls="logPanel"       data-tab="logPanel">Log</button>
+      </div>
 
-      <section id="payloadBuilder" class="panel active">
+      <!-- Payload Builder panel -->
+      <section id="payloadBuilder" class="panel active" role="tabpanel" tabindex="0" aria-labelledby="tab-payloadBuilder">
         <h2>Payload Builder</h2>
-        <input id="builderUrl" placeholder="Target URL" />
-        <select id="paramSelect"></select>
-        <textarea id="payloadInput" placeholder="Use a selected safe test marker or enter your authorized test string"></textarea>
-        <select id="methodSelect"><option>GET</option><option>POST</option></select>
-        <button id="executePayloadBtn">Execute</button>
-        <pre id="builderOutput"></pre>
+        <div class="form-field">
+          <label for="builderUrl">Target URL</label>
+          <input id="builderUrl" type="url" placeholder="https://example.test/page?id=1" autocomplete="off" />
+        </div>
+        <div class="form-field">
+          <label for="paramSelect">Parameter to inject</label>
+          <select id="paramSelect"></select>
+        </div>
+        <div class="form-field">
+          <label for="payloadInput">Payload / test string</label>
+          <textarea id="payloadInput" placeholder="Select a safe test marker from the sidebar, or enter your authorized test string"></textarea>
+        </div>
+        <div class="form-field">
+          <label for="methodSelect">HTTP method</label>
+          <select id="methodSelect"><option>GET</option><option>POST</option></select>
+        </div>
+        <button id="executePayloadBtn" class="btn-primary" title="Build the injected URL and display it below">Execute</button>
+        <pre id="builderOutput" aria-label="Built URL output" aria-live="polite"></pre>
       </section>
 
-      <section id="autoFill" class="panel">
+      <!-- Auto-Fill panel -->
+      <section id="autoFill" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-autoFill">
         <h2>Auto-Fill Targets</h2>
         <div id="formsList"></div>
         <div id="paramsList"></div>
       </section>
 
-      <section id="encoder" class="panel">
+      <!-- Encoder panel -->
+      <section id="encoder" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-encoder">
         <h2>Encoder / Decoder</h2>
-        <textarea id="encoderInput" placeholder="Input"></textarea>
-        <div class="button-row" id="encoderButtons"></div>
-        <textarea id="encoderOutput" placeholder="Output" readonly></textarea>
+        <div class="form-field">
+          <label for="encoderInput">Input</label>
+          <textarea id="encoderInput" placeholder="Enter text to encode or decode"></textarea>
+        </div>
+        <div class="button-row" id="encoderButtons" aria-label="Encoding operations"></div>
+        <div class="form-field">
+          <label for="encoderOutput">Output</label>
+          <textarea id="encoderOutput" placeholder="Result will appear here" readonly></textarea>
+        </div>
       </section>
 
-      <section id="tamper" class="panel">
+      <!-- Tamper panel -->
+      <section id="tamper" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-tamper">
         <h2>Tamper Headers</h2>
-        <select id="uaSelect"><option value="">Default browser UA</option><option>Mozilla/5.0 AuthorizedTester</option><option>AgoraHackLab/1.0</option></select>
-        <input id="refererInput" placeholder="Referer" />
-        <input id="cookieInput" placeholder="Cookie" />
-        <input id="xffInput" placeholder="X-Forwarded-For" />
-        <div id="customHeaders"></div>
-        <button id="addHeaderBtn">Add custom header</button>
-        <button id="saveTamperBtn">Save tamper state</button>
+        <div class="form-field">
+          <label for="uaSelect">User-Agent</label>
+          <select id="uaSelect">
+            <option value="">Default browser UA</option>
+            <option>Mozilla/5.0 AuthorizedTester</option>
+            <option>AgoraHackLab/1.0</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="refererInput">Referer</label>
+          <input id="refererInput" type="text" placeholder="https://example.test/page" autocomplete="off" />
+        </div>
+        <div class="form-field">
+          <label for="cookieInput">Cookie</label>
+          <input id="cookieInput" type="text" placeholder="session=abc123" autocomplete="off" />
+        </div>
+        <div class="form-field">
+          <label for="xffInput">X-Forwarded-For</label>
+          <input id="xffInput" type="text" placeholder="127.0.0.1" autocomplete="off" />
+        </div>
+        <div id="customHeaders" aria-label="Custom headers list"></div>
+        <div class="button-row">
+          <button id="addHeaderBtn" title="Add a custom HTTP header">+ Add custom header</button>
+          <button id="saveTamperBtn" title="Save current tamper settings to browser storage">Save tamper state</button>
+        </div>
       </section>
 
-      <section id="scanner" class="panel">
+      <!-- Scanner panel -->
+      <section id="scanner" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-scanner">
         <h2>Scanner</h2>
-        <progress id="scanProgress" value="0" max="100"></progress>
-        <button id="fuzzBtn">Fuzz selected param with safe markers</button>
-        <ul id="findingsList"></ul>
+        <div class="form-field">
+          <label for="scanProgress">Scan progress</label>
+          <progress id="scanProgress" value="0" max="100" aria-label="Scan progress"></progress>
+        </div>
+        <button id="fuzzBtn" class="btn-primary" title="Fuzz the selected parameter with safe test markers">Fuzz selected param with safe markers</button>
+        <ul id="findingsList" aria-label="Scan findings" aria-live="polite"></ul>
       </section>
 
-      <section id="adminFinder" class="panel">
+      <!-- Admin Finder panel -->
+      <section id="adminFinder" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-adminFinder">
         <h2>Admin Finder</h2>
-        <input id="adminBaseUrl" placeholder="https://example.test" />
-        <button id="adminStartBtn">Start authorized path check</button>
-        <ul id="adminResults"></ul>
+        <div class="form-field">
+          <label for="adminBaseUrl">Base URL</label>
+          <input id="adminBaseUrl" type="url" placeholder="https://example.test" autocomplete="off" />
+        </div>
+        <button id="adminStartBtn" class="btn-primary" title="Check common admin paths on the target origin">Start authorized path check</button>
+        <ul id="adminResults" aria-label="Admin path check results" aria-live="polite"></ul>
       </section>
 
-      <section id="dios" class="panel">
+      <!-- DIOS panel -->
+      <section id="dios" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-dios">
         <h2>DIOS Library</h2>
         <p class="muted">This build includes non-executing educational labels rather than live dump queries.</p>
         <div id="diosList"></div>
       </section>
 
-      <section id="notes" class="panel">
+      <!-- Notes panel -->
+      <section id="notes" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-notes">
         <h2>Notes</h2>
-        <input id="noteTitle" placeholder="Title" />
-        <textarea id="noteContent" placeholder="Observation notes"></textarea>
-        <button id="saveNoteBtn">Save Note</button>
-        <button id="exportNotesBtn">Export Notes</button>
-        <div id="notesList"></div>
+        <div class="form-field">
+          <label for="noteTitle">Title</label>
+          <input id="noteTitle" type="text" placeholder="Brief title for this observation" />
+        </div>
+        <div class="form-field">
+          <label for="noteContent">Observation notes</label>
+          <textarea id="noteContent" placeholder="Record your findings, steps to reproduce, and observations here"></textarea>
+        </div>
+        <div class="button-row">
+          <button id="saveNoteBtn" class="btn-primary" title="Save this note to browser storage">Save Note</button>
+          <button id="exportNotesBtn" title="Download all notes as a text file">Export Notes</button>
+        </div>
+        <div id="notesList" aria-label="Saved notes" aria-live="polite"></div>
       </section>
 
-      <section id="logPanel" class="panel">
+      <!-- Log panel -->
+      <section id="logPanel" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-logPanel">
         <h2>Activity Log</h2>
-        <button id="clearLogBtn">Clear</button>
-        <button id="exportLogBtn">Export</button>
-        <pre id="log"></pre>
+        <div class="button-row">
+          <button id="clearLogBtn" class="btn-danger" title="Clear all log entries">Clear</button>
+          <button id="exportLogBtn" title="Download log as a text file">Export</button>
+        </div>
+        <pre id="log" aria-label="Activity log" aria-live="polite"></pre>
       </section>
     </section>
   </main>
@@ -155,3 +250,4 @@
   <script src="js/notes.js"></script>
 </body>
 </html>
+
